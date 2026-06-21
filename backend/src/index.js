@@ -14,12 +14,19 @@ import paymentRoutes from './routes/payment.js';
 
 const app = express();
 const httpServer = createServer(app);
+const allowedOrigins = [
+  config.frontendUrl,
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://frontend-kappa-sepia-39.vercel.app',
+];
+
 const io = new SocketIOServer(httpServer, {
-  cors: { origin: config.frontendUrl, methods: ['GET', 'POST'] },
+  cors: { origin: allowedOrigins, methods: ['GET', 'POST'] },
 });
 
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({ origin: config.frontendUrl, credentials: true }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 
 const apiLimiter = rateLimit({
