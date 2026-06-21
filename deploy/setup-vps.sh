@@ -52,7 +52,7 @@ echo "  ⚠️  Edit /root/.claude/settings.json and add your FreeModel API key!
 # --- 6. Setup Project ---
 echo "[6/8] Setting up FreeCode AI project..."
 cd /opt
-git clone https://github.com/YOUR_USERNAME/freecode-ai.git || echo "  (Or copy files manually to /opt/freecode-ai)"
+git clone https://github.com/teleforgeofficiall/TELEFORGE-IDE-v2.git || echo "  (Or copy files manually to /opt/TELEFORGE-IDE-v2)"
 cd freecode-ai
 
 # Backend setup

@@ -45,8 +45,14 @@ function runSchema() {
     username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL,
     credits INTEGER DEFAULT 50, plan TEXT DEFAULT 'free',
     api_key TEXT DEFAULT '', razorpay_subscription_id TEXT,
+    is_admin INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+
+  // Add is_admin column if missing (for existing DBs)
+  try {
+    _db.run("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0");
+  } catch (e) { /* column already exists */ }
 
   _db.run(`CREATE TABLE IF NOT EXISTS sessions (
     id TEXT PRIMARY KEY, user_id TEXT NOT NULL,

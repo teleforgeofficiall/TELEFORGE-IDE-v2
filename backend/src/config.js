@@ -12,6 +12,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'dev-secret-key-change-in-production',
   databasePath: process.env.DATABASE_PATH || './data/freecode.db',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+  adminEmail: process.env.ADMIN_EMAIL || 'teleforgeofficial@gmail.com',
   razorpay: {
     keyId: process.env.RAZORPAY_KEY_ID || '',
     keySecret: process.env.RAZORPAY_KEY_SECRET || '',

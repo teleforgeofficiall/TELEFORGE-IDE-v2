@@ -16,15 +16,17 @@ export function registerUser(email, username, password) {
   const id = uuidv4();
   const passwordHash = bcrypt.hashSync(password, 10);
 
-  db.run('INSERT INTO users (id, email, username, password_hash, credits) VALUES (?, ?, ?, ?, ?)',
-    [id, email, username, passwordHash, config.freeCredits]);
+  const isAdmin = email === config.adminEmail ? 1 : 0;
+
+  db.run('INSERT INTO users (id, email, username, password_hash, credits, is_admin) VALUES (?, ?, ?, ?, ?, ?)',
+    [id, email, username, passwordHash, config.freeCredits, isAdmin]);
   persistDb();
 
-  const token = jwt.sign({ userId: id }, config.jwtSecret, { expiresIn: '7d' });
+  const token = jwt.sign({ userId: id, isAdmin: !!isAdmin }, config.jwtSecret, { expiresIn: '7d' });
 
   return {
     token,
-    user: { id, email, username, credits: config.freeCredits, plan: 'free' }
+    user: { id, email, username, credits: config.freeCredits, plan: 'free', isAdmin: !!isAdmin }
   };
 }
 
@@ -43,7 +45,9 @@ export function loginUser(email, password) {
     throw new Error('Invalid email or password');
   }
 
-  const token = jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: '7d' });
+  const isAdmin = user.is_admin === 1;
+
+  const token = jwt.sign({ userId: user.id, isAdmin }, config.jwtSecret, { expiresIn: '7d' });
 
   return {
     token,
@@ -53,7 +57,8 @@ export function loginUser(email, password) {
       username: user.username,
       credits: user.credits,
       plan: user.plan,
-      api_key: user.api_key || ''
+      api_key: user.api_key || '',
+      isAdmin
     }
   };
 }

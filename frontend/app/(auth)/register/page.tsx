@@ -26,7 +26,11 @@ export default function RegisterPage() {
       toast.success(`Welcome! You got ${data.user.credits} free credits!`);
       router.push('/ide');
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Registration failed');
+      if (!err.response) {
+        toast.error('Cannot connect to server. Make sure the backend is running on port 3001.');
+      } else {
+        toast.error(err.response?.data?.error || 'Registration failed');
+      }
     }
     setLoading(false);
   };
